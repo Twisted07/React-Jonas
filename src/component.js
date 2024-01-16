@@ -12,7 +12,8 @@ function Header() {
     );
 }
 
-function Form() {
+// * Handle the form data
+function Form({onAddItem}) {
     const [description, setDescription] = useState("");
     const [quantity, setQuantity] = useState(1);
 
@@ -21,8 +22,8 @@ function Form() {
         if (!description) return
 
         const newItem = { description, quantity, id: Date.now(), packed: false };
-        console.log(newItem);
 
+        onAddItem(newItem);
         setDescription("");
         setQuantity(1);
     }
@@ -43,21 +44,24 @@ function Form() {
     );
 }
 
-function List() {
+function List({items, onDeleteItem, onHandleChecked}) {
     return (
         <div className="list">
             <ul>
-                {initialItems.map(item => <Item item={item} key={item.id}/>)}
+                {items.map(item => <Item item={item} onDeleteItem={onDeleteItem} onHandleChecked={onHandleChecked} key={item.id}/>)}
             </ul>
         </div>
     );
 }
 
-function Item({item}) {
+function Item({item, onDeleteItem, onHandleChecked}) {
+    
     return (
         <li>
+            {/* If the checkbox is selected, I want the item.packed state to be updated to true */}
+            <input type="checkbox" onChange={() => onHandleChecked(item.id)}></input>
             <span style={item.packed ? {textDecoration: "line-through"} : {}}>{item.quantity} {item.description}</span>
-            <button>❌</button>
+            <button onClick={() => onDeleteItem(item.id)}>❌</button>
         </li>
     );
 }
