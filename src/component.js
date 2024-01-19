@@ -39,14 +39,32 @@ function Form({onAddItem}) {
 }
 
 function List({items, onDeleteItem, onHandleChecked}) {
+    const [sort, setSort] = useState('input');
+    let sortedItems;
+    
+    // TODO: Complete the sorting method for each category
+    switch (sort) {
+        case "input" : sortedItems = items; break;
+        case "description" : sortedItems = ""; break;
+        case "packed" : sortedItems = ""; break;
+    }
     return (
         <div className="list">
             <ul>
-                {items.map(item => <Item item={item} onDeleteItem={onDeleteItem} onHandleChecked={onHandleChecked} key={item.id}/>)}
+                {sortedItems.map(item => <Item item={item} onDeleteItem={onDeleteItem} onHandleChecked={onHandleChecked} key={item.id}/>)}
             </ul>
+
+            <div className="actions">
+                <select value={sort} onChange={(e) => setSort(e.target.value)}>
+                    <option value="input">Sort by Input Order</option>
+                    <option value="description">Sort by Description</option>
+                    <option value="packed">Sort by Packed Status</option>
+                </select>
+            </div>
         </div>
     );
 }
+
 
 function Item({item, onDeleteItem, onHandleChecked}) {
     
@@ -60,10 +78,25 @@ function Item({item, onDeleteItem, onHandleChecked}) {
     );
 }
 
-function Stats() {
+
+function Stats({ items }) {
+    if (!items.length) return (
+        <p className="footer">
+            <em>Start Packing your luggage!</em>
+        </p>
+    );
+
+    const numItems = items.length;
+    const numPacked = items.filter(item => item.packed).length;
+    const packedPercentage = Math.round((numPacked / numItems) * 100);
+
     return (
         <footer className="stats">
-            <em>💼You have X items on your list, and you already packed X (X%)</em>
+            <em>
+            {packedPercentage === 100 ? "You are set to go! ✈️" : 
+            `💼You have ${ numItems } items on your list, and you already packed ${ numPacked } (${ packedPercentage }%)` 
+            }
+            </em>
         </footer>
     );
 }

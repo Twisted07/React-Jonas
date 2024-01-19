@@ -1,5 +1,6 @@
 import {Header, Form, List, Stats} from './component'
 import { useState } from 'react';
+
 function App() {
   const [items, setItem] = useState([]);
 
@@ -16,6 +17,7 @@ function App() {
       setItem(items => items.map(item => item.id === id ? { ...item, packed: !item.packed } : item))
     }
 
+
   return (
   <div className='app'>
     <Header />
@@ -27,7 +29,7 @@ function App() {
       onDeleteItem={handleDeleteItems}
       onHandleChecked={handleChecked}
     />
-    <Stats />
+    <Stats items={items} />
   </div>
   );
 }
