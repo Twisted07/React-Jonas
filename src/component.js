@@ -38,16 +38,18 @@ function Form({onAddItem}) {
     );
 }
 
-function List({items, onDeleteItem, onHandleChecked}) {
+function List({items, onDeleteItem, onHandleChecked, onClearList}) {
     const [sort, setSort] = useState('input');
     let sortedItems;
-    
+
     // TODO: Complete the sorting method for each category
     switch (sort) {
         case "input" : sortedItems = items; break;
-        case "description" : sortedItems = ""; break;
-        case "packed" : sortedItems = ""; break;
+        case "description" : sortedItems = items.slice().sort((a, b) => a.description.localeCompare(b.description)) ; break;
+        case "packed" : sortedItems = items.slice().sort((a, b) => Number(a.packed) - Number(b.packed)); break;
     }
+
+
     return (
         <div className="list">
             <ul>
@@ -60,6 +62,8 @@ function List({items, onDeleteItem, onHandleChecked}) {
                     <option value="description">Sort by Description</option>
                     <option value="packed">Sort by Packed Status</option>
                 </select>
+
+                <button type="button" onClick={onClearList}>Clear List</button>
             </div>
         </div>
     );
